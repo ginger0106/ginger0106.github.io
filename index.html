@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <meta charset="utf-8">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
   <meta name="renderer" content="webkit">
   <meta http-equiv="X-UA-Compatible" content="IE=edge" >
@@ -27,7 +27,7 @@
     #container.show {
       background: linear-gradient(200deg,#a0cfe4,#e8c37e);
     }
-  </style>
+  </style><!-- hexo-inject:begin --><!-- hexo-inject:end -->
   
 
   
@@ -35,7 +35,7 @@
 </head>
 
 <body>
-  <div id="container" q-class="show:isCtnShow">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="container" q-class="show:isCtnShow">
     <canvas id="anm-canvas" class="anm-canvas"></canvas>
     <div class="left-col" q-class="show:isShow">
       
@@ -172,103 +172,67 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="a3c-asynchronous-advantage-actor-critic"><a class="markdownIt-Anchor" href="#a3c-asynchronous-advantage-actor-critic"></a> A3C  (asynchronous advantage actor-critic)</h1>
+        <h1 id="a3c-asynchronous-advantage-actor-critic">A3C (asynchronous advantage actor-critic)</h1>
 <blockquote>
-<p>Mnih V, Badia A P, Mirza M, et al. Asynchronous methods for deep reinforcement learning[C]//International Conference on Machine Learning. 2016: 1928-1937.<br>
-2016 ICML</p>
+<p>Mnih V, Badia A P, Mirza M, et al. Asynchronous methods for deep reinforcement learning[C]//International Conference on Machine Learning. 2016: 1928-1937. 2016 ICML</p>
 </blockquote>
-<h1 id="1-on-policy-off-policy"><a class="markdownIt-Anchor" href="#1-on-policy-off-policy"></a> 1. on-policy&amp; off-policy</h1>
+<h1 id="on-policy-off-policy">1. on-policy&amp; off-policy</h1>
 <p>Sutton的书RL an introduction edition 2. 在5.4节 Monte Carlo Control without Exploring starts中，作者定义了on-policy与off-policy:</p>
 <blockquote>
-<p>On-policy methods attempt to evaluate or improve the policy that is used to make decisions,<br>
-whereas off-policy methods evaluate or improve a policy different from that used to generate the data.</p>
+<p>On-policy methods attempt to evaluate or improve the policy that is used to make decisions, whereas off-policy methods evaluate or improve a policy different from that used to generate the data.</p>
 </blockquote>
 <p>一句话解释：其实就是只有一句话: 更新值函数时是否只使用当前策略所产生的样本.</p>
-<p><img src="https://github.com/ginger0106/Blog_source_backup/blob/master/ginger0106/images/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20180327205214.png" alt=""></p>
+<p><img src="https://github.com/ginger0106/Blog_source_backup/blob/master/ginger0106/images/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20180327205214.png"> - on-policy：REINFORCE, TRPO, SARSA</p>
 <ul>
-<li>
-<p>on-policy：REINFORCE, TRPO, SARSA</p>
-</li>
-<li>
-<p>off-policy：Q-learning, Deterministic policy gradient</p>
-</li>
+<li>off-policy：Q-learning, Deterministic policy gradient</li>
 </ul>
-<p><img src="http://jiantuku-image-ginger.oss-cn-beijing.aliyuncs.com/18-6-9/35231674.jpg" alt=""><br>
-<img src="http://jiantuku-image-ginger.oss-cn-beijing.aliyuncs.com/18-6-9/96174817.jpg" alt=""></p>
-<h1 id="2-value-based-rl-policy-based-rl"><a class="markdownIt-Anchor" href="#2-value-based-rl-policy-based-rl"></a> 2. Value-based RL &amp; Policy-based RL</h1>
-<h2 id="def"><a class="markdownIt-Anchor" href="#def"></a> Def</h2>
+<p><img src="http://jiantuku-image-ginger.oss-cn-beijing.aliyuncs.com/18-6-9/35231674.jpg"> <img src="http://jiantuku-image-ginger.oss-cn-beijing.aliyuncs.com/18-6-9/96174817.jpg"></p>
+<h1 id="value-based-rl-policy-based-rl">2. Value-based RL &amp; Policy-based RL</h1>
+<h2 id="def">Def</h2>
 <ul>
-<li>**Value-based： ** A policy is generated from value function:</li>
+<li><strong>Value-based： </strong> A policy is generated from value function: <span class="math display">\[ V_\theta (s)= V^\pi(s) \]</span> <span class="math display">\[ Q_\theta (s,a)= Q^\pi(s,a)\]</span></li>
 </ul>
-<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>V</mi><mi>θ</mi></msub><mo>(</mo><mi>s</mi><mo>)</mo><mo>=</mo><msup><mi>V</mi><mi>π</mi></msup><mo>(</mo><mi>s</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">V_\theta (s)= V^\pi(s) 
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base"><span class="mord"><span class="mord mathit" style="margin-right:0.22222em;">V</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.22222em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathit mtight" style="margin-right:0.02778em;">θ</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"></span></span></span></span></span><span class="mopen">(</span><span class="mord mathit">s</span><span class="mclose">)</span><span class="mord rule" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mord rule" style="margin-right:0.2777777777777778em;"></span><span class="mord"><span class="mord mathit" style="margin-right:0.22222em;">V</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7143919999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathit mtight" style="margin-right:0.03588em;">π</span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathit">s</span><span class="mclose">)</span></span></span></span></span></p>
-<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>Q</mi><mi>θ</mi></msub><mo>(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo>)</mo><mo>=</mo><msup><mi>Q</mi><mi>π</mi></msup><mo>(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">Q_\theta (s,a)= Q^\pi(s,a)
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base"><span class="mord"><span class="mord mathit">Q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathit mtight" style="margin-right:0.02778em;">θ</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"></span></span></span></span></span><span class="mopen">(</span><span class="mord mathit">s</span><span class="mpunct">,</span><span class="mord rule" style="margin-right:0.16666666666666666em;"></span><span class="mord mathit">a</span><span class="mclose">)</span><span class="mord rule" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mord rule" style="margin-right:0.2777777777777778em;"></span><span class="mord"><span class="mord mathit">Q</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7143919999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathit mtight" style="margin-right:0.03588em;">π</span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathit">s</span><span class="mpunct">,</span><span class="mord rule" style="margin-right:0.16666666666666666em;"></span><span class="mord mathit">a</span><span class="mclose">)</span></span></span></span></span></p>
 <blockquote>
 <p>我们用线性非线性的方式对值函数进行逼近求解</p>
 </blockquote>
 <ul>
-<li>**Policy-based RL： **Directly parametrise the policy:</li>
+<li><strong>Policy-based RL： </strong>Directly parametrise the policy: <span class="math display">\[ \pi_\theta(s,a)= P[a | s,\theta]\]</span> The output is a probability.</li>
 </ul>
-<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>π</mi><mi>θ</mi></msub><mo>(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo>)</mo><mo>=</mo><mi>P</mi><mo>[</mo><mi>a</mi><mi mathvariant="normal">∣</mi><mi>s</mi><mo separator="true">,</mo><mi>θ</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">\pi_\theta(s,a)= P[a | s,\theta]
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base"><span class="mord"><span class="mord mathit" style="margin-right:0.03588em;">π</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathit mtight" style="margin-right:0.02778em;">θ</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"></span></span></span></span></span><span class="mopen">(</span><span class="mord mathit">s</span><span class="mpunct">,</span><span class="mord rule" style="margin-right:0.16666666666666666em;"></span><span class="mord mathit">a</span><span class="mclose">)</span><span class="mord rule" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mord rule" style="margin-right:0.2777777777777778em;"></span><span class="mord mathit" style="margin-right:0.13889em;">P</span><span class="mopen">[</span><span class="mord mathit">a</span><span class="mord">∣</span><span class="mord mathit">s</span><span class="mpunct">,</span><span class="mord rule" style="margin-right:0.16666666666666666em;"></span><span class="mord mathit" style="margin-right:0.02778em;">θ</span><span class="mclose">]</span></span></span></span></span></p>
-<p>The output is a probability.</p>
 <blockquote>
 <p>用线性或非线性（如神经网络）对策略进行求解</p>
 </blockquote>
-<h2 id="difference"><a class="markdownIt-Anchor" href="#difference"></a> Difference</h2>
+<h2 id="difference">Difference</h2>
 <ul>
-<li>
-<p>Value Based</p>
-<ul>
+<li>Value Based</li>
 <li>Learnt Value Function</li>
 <li>Implicit policy</li>
 </ul>
 <blockquote>
 <p>先求值函数，然后用贪婪算法求策略，所以是隐含的：</p>
 </blockquote>
-</li>
-<li>
-<p>Policy Based</p>
 <ul>
+<li>Policy Based</li>
 <li>No Value Function</li>
-<li>Learnt Policy</li>
-</ul>
-</li>
-<li>
-<p>Actor-Critic</p>
-<ul>
+<li><p>Learnt Policy</p></li>
+<li>Actor-Critic</li>
 <li>Learnt Value Function</li>
-<li>Learnt Policy</li>
+<li><p>Learnt Policy</p></li>
 </ul>
-</li>
-</ul>
-<p><img src="http://jiantuku-image-ginger.oss-cn-beijing.aliyuncs.com/18-6-9/31700400.jpg" alt=""></p>
-<h2 id="policy-based-rl"><a class="markdownIt-Anchor" href="#policy-based-rl"></a> Policy-Based RL</h2>
+<div class="figure">
+<img src="http://jiantuku-image-ginger.oss-cn-beijing.aliyuncs.com/18-6-9/31700400.jpg">
+
+</div>
+<h2 id="policy-based-rl">Policy-Based RL</h2>
 <ul>
-<li>Advantages:
-<ul>
-<li>Better convergence properties</li>
-</ul>
-<blockquote>
-<p>基于策略的学习可能会具有更好的收敛性，这是因为基于策略的学习虽然每次只改善一点点，但总是朝着好的方向在改善；而价值函数在后期可能会一直围绕最优价值函数持续小的震荡而不收敛，同时有时候求解值函数非常复杂。</p>
-</blockquote>
-<ul>
+<li>Advantages:</li>
+<li>Better convergence properties &gt;基于策略的学习可能会具有更好的收敛性，这是因为基于策略的学习虽然每次只改善一点点，但总是朝着好的方向在改善；而价值函数在后期可能会一直围绕最优价值函数持续小的震荡而不收敛，同时有时候求解值函数非常复杂。</li>
 <li>Effective in high-dimensional or continuous action spaces</li>
 <li>Can learn stochastic policies</li>
-</ul>
-</li>
-<li>Disadvantages:
-<ul>
+<li>Disadvantages:</li>
 <li>Typically converge to a local rather than global optimum</li>
-<li>Evaluating a policy is typically inefficient and high variance</li>
+<li>Evaluating a policy is typically inefficient and high variance &gt;原始基于策略的学习效率不够高，还有较高的变异性（方差，Variance）。因为基于价值函数的策略决定每次都是推促个体去选择一个最大价值的行为；但是基于策略的，更多的时候策略的选择时仅会在策略某一参数梯度上移动一点点，使得整个的学习比较平滑，因此不够高效。同时当评估单个策略并不充分时，方差较大。</li>
 </ul>
-<blockquote>
-<p>原始基于策略的学习效率不够高，还有较高的变异性（方差，Variance）。因为基于价值函数的策略决定每次都是推促个体去选择一个最大价值的行为；但是基于策略的，更多的时候策略的选择时仅会在策略某一参数梯度上移动一点点，使得整个的学习比较平滑，因此不够高效。同时当评估单个策略并不充分时，方差较大。</p>
-</blockquote>
-</li>
-</ul>
-<h2 id="policy-optimisation"><a class="markdownIt-Anchor" href="#policy-optimisation"></a> Policy Optimisation</h2>
+<h2 id="policy-optimisation">Policy Optimisation</h2>
 <ul>
 <li>Policy based reinforcement learning is an optimisation problem</li>
 </ul>
@@ -276,93 +240,76 @@ whereas off-policy methods evaluate or improve a policy different from that used
 <ul>
 <li>Find θ that maximises J(θ)</li>
 </ul>
-<p>而将策略表达成参数θ的目标函数，有如下几种形式，start value是针对拥有起始状态的情况下求起始状态 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>s</mi><mn>1</mn></msub></mrow><annotation encoding="application/x-tex">s_1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="base"><span class="mord"><span class="mord mathit">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"></span></span></span></span></span></span></span></span> 获得的奖励，average value针对不存在起始状态而且停止状态也不固定的情况，在这些可能的状态上计算平均获得的奖励。 Average reward per time-step为每一个时间步长在各种情况下所能得到的平均奖励。</p>
-<blockquote>
-<p>目标函数的本质还是奖励。</p>
-</blockquote>
+<p>而将策略表达成参数θ的目标函数，有如下几种形式，start value是针对拥有起始状态的情况下求起始状态 <span class="math inline">\(s_1\)</span> 获得的奖励，average value针对不存在起始状态而且停止状态也不固定的情况，在这些可能的状态上计算平均获得的奖励。 Average reward per time-step为每一个时间步长在各种情况下所能得到的平均奖励。 &gt; 目标函数的本质还是奖励。</p>
 <ul>
 <li>Compute Policy Gradient</li>
 </ul>
 <p>如何来优化这个目标？ 我们采用随即梯度算法来解决。</p>
-<p><img src="http://jiantuku-image-ginger.oss-cn-beijing.aliyuncs.com/18-6-9/16343231.jpg" alt=""><br>
-<img src="http://jiantuku-image-ginger.oss-cn-beijing.aliyuncs.com/18-6-9/58209890.jpg" alt=""></p>
-<blockquote>
-<p>所以，现在我们得到所有形式的目标函数所对应的策略梯度是一样的，注意这里有两个部分组成，一个是策略函数的log形式，一个是引导奖励(score function)。第一部分是参数化直接得到的，第二部分可以直接用即时奖励来计算，也可以用值函数近似，也就是AC算法。</p>
-</blockquote>
-<h2 id="policy-function"><a class="markdownIt-Anchor" href="#policy-function"></a> Policy Function</h2>
+<p><img src="http://jiantuku-image-ginger.oss-cn-beijing.aliyuncs.com/18-6-9/16343231.jpg"> <img src="http://jiantuku-image-ginger.oss-cn-beijing.aliyuncs.com/18-6-9/58209890.jpg"> &gt;所以，现在我们得到所有形式的目标函数所对应的策略梯度是一样的，注意这里有两个部分组成，一个是策略函数的log形式，一个是引导奖励(score function)。第一部分是参数化直接得到的，第二部分可以直接用即时奖励来计算，也可以用值函数近似，也就是AC算法。</p>
+<h2 id="policy-function">Policy Function</h2>
 <ul>
 <li>softmax</li>
 <li>Gaussian</li>
 <li>Random</li>
 </ul>
-<h2 id="score-function"><a class="markdownIt-Anchor" href="#score-function"></a> Score Function</h2>
+<h2 id="score-function">Score Function</h2>
 <p>根据Score Function的不同，对应不同的算法。如下图：</p>
-<p><img src="http://jiantuku-image-ginger.oss-cn-beijing.aliyuncs.com/18-6-9/88031244.jpg" alt=""></p>
+<div class="figure">
+<img src="http://jiantuku-image-ginger.oss-cn-beijing.aliyuncs.com/18-6-9/88031244.jpg">
+
+</div>
 <ul>
-<li>Monte-Carlo Policy Gradient (REINFORCE)<br>
-Using return vt as an unbiased sample of <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>Q</mi><msub><mi>π</mi><mi>θ</mi></msub></msup><mo>(</mo><msub><mi>s</mi><mi>t</mi></msub><mo separator="true">,</mo><msub><mi>a</mi><mi>t</mi></msub><mo>)</mo></mrow><annotation encoding="application/x-tex">Q^{\pi_\theta}(s_t, a_t)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base"><span class="mord"><span class="mord mathit">Q</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.664392em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathit mtight" style="margin-right:0.03588em;">π</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3487714285714287em;margin-left:-0.03588em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathit mtight" style="margin-right:0.02778em;">θ</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15122857142857138em;"></span></span></span></span></span></span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord"><span class="mord mathit">s</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathit mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"></span></span></span></span></span><span class="mpunct">,</span><span class="mord rule" style="margin-right:0.16666666666666666em;"></span><span class="mord"><span class="mord mathit">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathit mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"></span></span></span></span></span><span class="mclose">)</span></span></span></span></li>
+<li>Monte-Carlo Policy Gradient (REINFORCE) Using return vt as an unbiased sample of <span class="math inline">\(Q^{\pi_\theta}(s_t, a_t)\)</span> &gt; Monte-Carlo policy gradient still has high variance</li>
 </ul>
-<blockquote>
-<p>Monte-Carlo policy gradient still has high variance</p>
-</blockquote>
-<h1 id="3-actor-critic"><a class="markdownIt-Anchor" href="#3-actor-critic"></a> 3. Actor-Critic</h1>
-<h2 id="q-actor-critic"><a class="markdownIt-Anchor" href="#q-actor-critic"></a> Q Actor-Critic</h2>
+<h1 id="actor-critic">3. Actor-Critic</h1>
+<h2 id="q-actor-critic">Q Actor-Critic</h2>
 <ul>
-<li>We use a critic to estimate the action-value function</li>
+<li><p>We use a critic to estimate the action-value function <span class="math display">\[ Q_w(s,a)\approx Q^{\pi_\theta}(s, a)\]</span></p></li>
+<li><p>Actor-critic algorithms maintain two sets of parameters</p></li>
 </ul>
-<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>Q</mi><mi>w</mi></msub><mo>(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo>)</mo><mo>≈</mo><msup><mi>Q</mi><msub><mi>π</mi><mi>θ</mi></msub></msup><mo>(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">Q_w(s,a)\approx Q^{\pi_\theta}(s, a)
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base"><span class="mord"><span class="mord mathit">Q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathit mtight" style="margin-right:0.02691em;">w</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"></span></span></span></span></span><span class="mopen">(</span><span class="mord mathit">s</span><span class="mpunct">,</span><span class="mord rule" style="margin-right:0.16666666666666666em;"></span><span class="mord mathit">a</span><span class="mclose">)</span><span class="mord rule" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≈</span><span class="mord rule" style="margin-right:0.2777777777777778em;"></span><span class="mord"><span class="mord mathit">Q</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7143919999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathit mtight" style="margin-right:0.03588em;">π</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3487714285714287em;margin-left:-0.03588em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathit mtight" style="margin-right:0.02778em;">θ</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15122857142857138em;"></span></span></span></span></span></span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathit">s</span><span class="mpunct">,</span><span class="mord rule" style="margin-right:0.16666666666666666em;"></span><span class="mord mathit">a</span><span class="mclose">)</span></span></span></span></span></p>
-<ul>
-<li>
-<p>Actor-critic algorithms maintain two sets of parameters</p>
 <p>-<strong>Critic</strong> Updates action-value function parameters w</p>
 <p>-<strong>Actor</strong> Updates policy parameters θ, in direction suggested by critic</p>
-</li>
-</ul>
-<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">Δ</mi><mi>θ</mi><mo>=</mo><mi>α</mi><msub><mi mathvariant="normal">∇</mi><mi>θ</mi></msub><mi>l</mi><mi>o</mi><mi>g</mi><msub><mi>π</mi><mi>θ</mi></msub><mo>(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo>)</mo><msub><mi>Q</mi><mi>w</mi></msub><mo>(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">\Delta\theta=\alpha\nabla_\theta log \pi_\theta(s,a)Q_w(s, a)
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base"><span class="mord">Δ</span><span class="mord mathit" style="margin-right:0.02778em;">θ</span><span class="mord rule" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mord rule" style="margin-right:0.2777777777777778em;"></span><span class="mord mathit" style="margin-right:0.0037em;">α</span><span class="mord"><span class="mord">∇</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathit mtight" style="margin-right:0.02778em;">θ</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"></span></span></span></span></span><span class="mord mathit" style="margin-right:0.01968em;">l</span><span class="mord mathit">o</span><span class="mord mathit" style="margin-right:0.03588em;">g</span><span class="mord"><span class="mord mathit" style="margin-right:0.03588em;">π</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathit mtight" style="margin-right:0.02778em;">θ</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"></span></span></span></span></span><span class="mopen">(</span><span class="mord mathit">s</span><span class="mpunct">,</span><span class="mord rule" style="margin-right:0.16666666666666666em;"></span><span class="mord mathit">a</span><span class="mclose">)</span><span class="mord"><span class="mord mathit">Q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathit mtight" style="margin-right:0.02691em;">w</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"></span></span></span></span></span><span class="mopen">(</span><span class="mord mathit">s</span><span class="mpunct">,</span><span class="mord rule" style="margin-right:0.16666666666666666em;"></span><span class="mord mathit">a</span><span class="mclose">)</span></span></span></span></span></p>
+<p><span class="math display">\[\Delta\theta=\alpha\nabla_\theta log \pi_\theta(s,a)Q_w(s, a)\]</span></p>
 <blockquote>
-<p>可以明显看出，Critic做的事情其实是我们已经见过的：策略评估，他要告诉个体，在由参数 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>θ</mi></mrow><annotation encoding="application/x-tex">\theta</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:0.69444em;vertical-align:0em;"></span><span class="base"><span class="mord mathit" style="margin-right:0.02778em;">θ</span></span></span></span> 确定的策略 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>π</mi><mi>θ</mi></msub></mrow><annotation encoding="application/x-tex">\pi_{\theta}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.43056em;"></span><span class="strut bottom" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="base"><span class="mord"><span class="mord mathit" style="margin-right:0.03588em;">π</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:-0.03588em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathit mtight" style="margin-right:0.02778em;">θ</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"></span></span></span></span></span></span></span></span> 到底表现得怎么样。关于策略评估我们之前讲过，可以使用蒙特卡洛策略评估、TD学习以及TD(λ)等方式实现</p>
+<p>可以明显看出，Critic做的事情其实是我们已经见过的：策略评估，他要告诉个体，在由参数 <span class="math inline">\(\theta\)</span> 确定的策略 <span class="math inline">\(\pi_{\theta}\)</span> 到底表现得怎么样。关于策略评估我们之前讲过，可以使用蒙特卡洛策略评估、TD学习以及TD(λ)等方式实现</p>
 </blockquote>
-<p><img src="http://jiantuku-image-ginger.oss-cn-beijing.aliyuncs.com/18-6-9/45370982.jpg" alt="AC"></p>
+<div class="figure">
+<img src="http://jiantuku-image-ginger.oss-cn-beijing.aliyuncs.com/18-6-9/45370982.jpg" alt="AC">
+<p class="caption">AC</p>
+</div>
 <blockquote>
 <p>在这个例子当中，我们只是用了线性的函数来估计Q，当然目前都是神经网络来计算了。另外，REINFORCE和Q AC有high variance的问题。因此有了如下的改进算法。</p>
 </blockquote>
-<h2 id="advantage-actor-critic"><a class="markdownIt-Anchor" href="#advantage-actor-critic"></a> Advantage Actor-Critic</h2>
+<h2 id="advantage-actor-critic">Advantage Actor-Critic</h2>
 <ul>
-<li>advantage function</li>
+<li>advantage function <span class="math display">\[ V_v(s,a)\approx V^{\pi_\theta}(s, a)\]</span> <span class="math display">\[ Q_w(s,a)\approx Q^{\pi_\theta}(s, a)\]</span> <span class="math display">\[ A(s,a)= Q_w(s,a)-V_v(s,a)\]</span> <img src="https://github.com/ginger0106/Blog_source_backup/blob/master/ginger0106/images/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20180327224706.png"></li>
 </ul>
-<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>V</mi><mi>v</mi></msub><mo>(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo>)</mo><mo>≈</mo><msup><mi>V</mi><msub><mi>π</mi><mi>θ</mi></msub></msup><mo>(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">V_v(s,a)\approx V^{\pi_\theta}(s, a)
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base"><span class="mord"><span class="mord mathit" style="margin-right:0.22222em;">V</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.22222em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathit mtight" style="margin-right:0.03588em;">v</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"></span></span></span></span></span><span class="mopen">(</span><span class="mord mathit">s</span><span class="mpunct">,</span><span class="mord rule" style="margin-right:0.16666666666666666em;"></span><span class="mord mathit">a</span><span class="mclose">)</span><span class="mord rule" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≈</span><span class="mord rule" style="margin-right:0.2777777777777778em;"></span><span class="mord"><span class="mord mathit" style="margin-right:0.22222em;">V</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7143919999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathit mtight" style="margin-right:0.03588em;">π</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3487714285714287em;margin-left:-0.03588em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathit mtight" style="margin-right:0.02778em;">θ</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15122857142857138em;"></span></span></span></span></span></span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathit">s</span><span class="mpunct">,</span><span class="mord rule" style="margin-right:0.16666666666666666em;"></span><span class="mord mathit">a</span><span class="mclose">)</span></span></span></span></span></p>
-<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>Q</mi><mi>w</mi></msub><mo>(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo>)</mo><mo>≈</mo><msup><mi>Q</mi><msub><mi>π</mi><mi>θ</mi></msub></msup><mo>(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">Q_w(s,a)\approx Q^{\pi_\theta}(s, a)
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base"><span class="mord"><span class="mord mathit">Q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathit mtight" style="margin-right:0.02691em;">w</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"></span></span></span></span></span><span class="mopen">(</span><span class="mord mathit">s</span><span class="mpunct">,</span><span class="mord rule" style="margin-right:0.16666666666666666em;"></span><span class="mord mathit">a</span><span class="mclose">)</span><span class="mord rule" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≈</span><span class="mord rule" style="margin-right:0.2777777777777778em;"></span><span class="mord"><span class="mord mathit">Q</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.7143919999999999em;"><span style="top:-3.113em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathit mtight" style="margin-right:0.03588em;">π</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3487714285714287em;margin-left:-0.03588em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathit mtight" style="margin-right:0.02778em;">θ</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15122857142857138em;"></span></span></span></span></span></span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathit">s</span><span class="mpunct">,</span><span class="mord rule" style="margin-right:0.16666666666666666em;"></span><span class="mord mathit">a</span><span class="mclose">)</span></span></span></span></span></p>
-<p><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mo>(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo>)</mo><mo>=</mo><msub><mi>Q</mi><mi>w</mi></msub><mo>(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo>)</mo><mo>−</mo><msub><mi>V</mi><mi>v</mi></msub><mo>(</mo><mi>s</mi><mo separator="true">,</mo><mi>a</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">A(s,a)= Q_w(s,a)-V_v(s,a)
-</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base"><span class="mord mathit">A</span><span class="mopen">(</span><span class="mord mathit">s</span><span class="mpunct">,</span><span class="mord rule" style="margin-right:0.16666666666666666em;"></span><span class="mord mathit">a</span><span class="mclose">)</span><span class="mord rule" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mord rule" style="margin-right:0.2777777777777778em;"></span><span class="mord"><span class="mord mathit">Q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathit mtight" style="margin-right:0.02691em;">w</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"></span></span></span></span></span><span class="mopen">(</span><span class="mord mathit">s</span><span class="mpunct">,</span><span class="mord rule" style="margin-right:0.16666666666666666em;"></span><span class="mord mathit">a</span><span class="mclose">)</span><span class="mord rule" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mord rule" style="margin-right:0.2222222222222222em;"></span><span class="mord"><span class="mord mathit" style="margin-right:0.22222em;">V</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.22222em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathit mtight" style="margin-right:0.03588em;">v</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"></span></span></span></span></span><span class="mopen">(</span><span class="mord mathit">s</span><span class="mpunct">,</span><span class="mord rule" style="margin-right:0.16666666666666666em;"></span><span class="mord mathit">a</span><span class="mclose">)</span></span></span></span></span></p>
-<p><img src="https://github.com/ginger0106/Blog_source_backup/blob/master/ginger0106/images/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20180327224706.png" alt=""></p>
-<h2 id="training"><a class="markdownIt-Anchor" href="#training"></a> Training</h2>
-<p><img src="http://jiantuku-image-ginger.oss-cn-beijing.aliyuncs.com/18-6-9/10566688.jpg" alt=""></p>
+<h2 id="training">Training</h2>
+<div class="figure">
+<img src="http://jiantuku-image-ginger.oss-cn-beijing.aliyuncs.com/18-6-9/10566688.jpg">
+
+</div>
 <p>如上图：我们说AC结合了 Policy Gradient (Actor) 和 Function Approximation (Critic) 的方法. Actor 基于概率选行为, Critic 基于 Actor 的行为评判行为的得分, Actor 根据 Critic 的评分修改选行为的概率。</p>
-<p>结合到具体的网络上就是：Actor和Critic各为一个网络，Actor输入是状态输出的是动作，loss就是<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi><mi>o</mi><mi>g</mi><mi mathvariant="normal">_</mi><mi>p</mi><mi>r</mi><mi>o</mi><mi>b</mi><mo>∗</mo><mi>t</mi><mi>d</mi><mi mathvariant="normal">_</mi><mi>e</mi><mi>r</mi><mi>r</mi><mi>o</mi><mi>r</mi></mrow><annotation encoding="application/x-tex">log\_prob * td\_error</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.69444em;"></span><span class="strut bottom" style="height:1.00444em;vertical-align:-0.31em;"></span><span class="base"><span class="mord mathit" style="margin-right:0.01968em;">l</span><span class="mord mathit">o</span><span class="mord mathit" style="margin-right:0.03588em;">g</span><span class="mord" style="margin-right:0.02778em;">_</span><span class="mord mathit">p</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mord mathit">o</span><span class="mord mathit">b</span><span class="mord rule" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mord rule" style="margin-right:0.2222222222222222em;"></span><span class="mord mathit">t</span><span class="mord mathit">d</span><span class="mord" style="margin-right:0.02778em;">_</span><span class="mord mathit">e</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mord mathit">o</span><span class="mord mathit" style="margin-right:0.02778em;">r</span></span></span></span>,(和策略梯度相对应，注意到这里的loss和Policy Gradient中的差不多，只是vt换成td_error，引导奖励值vt换了来源（Critic给的）而已)，Critic输入的是状态输出的是Q值，loss是<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>M</mi><mi>S</mi><mi>E</mi><mo>(</mo><mo>(</mo><mi>r</mi><mo>+</mo><mi>γ</mi><mo>∗</mo><msub><mi>Q</mi><mrow><mi>n</mi><mi>e</mi><mi>x</mi><mi>t</mi></mrow></msub><mo>)</mo><mo>−</mo><msub><mi>Q</mi><mrow><mi>e</mi><mi>v</mi><mi>a</mi><mi>l</mi></mrow></msub><mo>)</mo></mrow><annotation encoding="application/x-tex">MSE((r+\gamma*Q_{next}) - Q_{eval})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1em;vertical-align:-0.25em;"></span><span class="base"><span class="mord mathit" style="margin-right:0.10903em;">M</span><span class="mord mathit" style="margin-right:0.05764em;">S</span><span class="mord mathit" style="margin-right:0.05764em;">E</span><span class="mopen">(</span><span class="mopen">(</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mord rule" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mord rule" style="margin-right:0.2222222222222222em;"></span><span class="mord mathit" style="margin-right:0.05556em;">γ</span><span class="mord rule" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mord rule" style="margin-right:0.2222222222222222em;"></span><span class="mord"><span class="mord mathit">Q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathit mtight">n</span><span class="mord mathit mtight">e</span><span class="mord mathit mtight">x</span><span class="mord mathit mtight">t</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"></span></span></span></span></span><span class="mclose">)</span><span class="mord rule" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mord rule" style="margin-right:0.2222222222222222em;"></span><span class="mord"><span class="mord mathit">Q</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathit mtight">e</span><span class="mord mathit mtight" style="margin-right:0.03588em;">v</span><span class="mord mathit mtight">a</span><span class="mord mathit mtight" style="margin-right:0.01968em;">l</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"></span></span></span></span></span><span class="mclose">)</span></span></span></span>也就是<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>M</mi><mi>S</mi><mi>E</mi><mo>(</mo><mi>t</mi><mi>d</mi><mi mathvariant="normal">_</mi><mi>e</mi><mi>r</mi><mi>r</mi><mi>o</mi><mi>r</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">MSE(td\_error)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="strut" style="height:0.75em;"></span><span class="strut bottom" style="height:1.06em;vertical-align:-0.31em;"></span><span class="base"><span class="mord mathit" style="margin-right:0.10903em;">M</span><span class="mord mathit" style="margin-right:0.05764em;">S</span><span class="mord mathit" style="margin-right:0.05764em;">E</span><span class="mopen">(</span><span class="mord mathit">t</span><span class="mord mathit">d</span><span class="mord" style="margin-right:0.02778em;">_</span><span class="mord mathit">e</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mord mathit">o</span><span class="mord mathit" style="margin-right:0.02778em;">r</span><span class="mclose">)</span></span></span></span>，也就是说这里更新critic对应Q-learning是一样的均方误差。</p>
-<h1 id="4-a3c"><a class="markdownIt-Anchor" href="#4-a3c"></a> 4. A3C</h1>
-<h2 id="asynchronous"><a class="markdownIt-Anchor" href="#asynchronous"></a> Asynchronous</h2>
-<p>DQN比传统RL算法有了巨大提升其中一个主要原因就是使用了经验回放的技巧。然而，打破数据的相关性，经验回放并非是唯一的方法。另外一种方法是<strong>异步</strong>的方法（异步的方法是指数据并非同时产生）<br>
-<img src="https://github.com/ginger0106/Blog_source_backup/blob/master/ginger0106/images/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20180328102925.png" alt=""></p>
-<h2 id="advantage"><a class="markdownIt-Anchor" href="#advantage"></a> Advantage</h2>
-<p>相比DQN算法，A3C算法不需要使用经验池来存储历史样本并随机抽取训练来打乱数据相关性，节约了存储空间，并且采用异步训练，大大加倍了数据的采样速度，也因此提升了训练速度。与此同时，采用多个不同训练环境采集样本，样本的分布更加均匀，更有利于神经网络的训练。</p>
-<p><img src="http://jiantuku-image-ginger.oss-cn-beijing.aliyuncs.com/18-6-9/42121203.jpg" alt=""></p>
-<h1 id="5-example"><a class="markdownIt-Anchor" href="#5-example"></a> 5. Example</h1>
-<h2 id="cartpole"><a class="markdownIt-Anchor" href="#cartpole"></a> CartPole</h2>
-<p>CartPole的玩法如下动图所示，目标就是保持一根杆一直竖直朝上，杆由于重力原因会一直倾斜，当杆倾斜到一定程度就会倒下，此时需要朝左或者右移动杆保证它不会倒下来。我们执行一个动作，动作取值为0或1，代表向左或向右移动，返回的observation是一个四维向量，reward值一直是1，当杆倒下时done的取值为False，其他为True，info是调试信息打印为空具体使用暂时不清楚。如果杆竖直向上的时间越长，得到reward的次数就越多。<br>
-<img src="cp_1.gif" alt=""></p>
+<p>结合到具体的网络上就是：Actor和Critic各为一个网络，Actor输入是状态输出的是动作，loss就是<span class="math inline">\(log\_prob * td\_error\)</span>,(和策略梯度相对应，注意到这里的loss和Policy Gradient中的差不多，只是vt换成td_error，引导奖励值vt换了来源（Critic给的）而已)，Critic输入的是状态输出的是Q值，loss是<span class="math inline">\(MSE((r+\gamma*Q_{next}) - Q_{eval})\)</span>也就是<span class="math inline">\(MSE(td\_error)\)</span>，也就是说这里更新critic对应Q-learning是一样的均方误差。</p>
+<h1 id="a3c">4. A3C</h1>
+<h2 id="asynchronous">Asynchronous</h2>
+<p>DQN比传统RL算法有了巨大提升其中一个主要原因就是使用了经验回放的技巧。然而，打破数据的相关性，经验回放并非是唯一的方法。另外一种方法是<strong>异步</strong>的方法（异步的方法是指数据并非同时产生） <img src="https://github.com/ginger0106/Blog_source_backup/blob/master/ginger0106/images/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20180328102925.png"> ## Advantage 相比DQN算法，A3C算法不需要使用经验池来存储历史样本并随机抽取训练来打乱数据相关性，节约了存储空间，并且采用异步训练，大大加倍了数据的采样速度，也因此提升了训练速度。与此同时，采用多个不同训练环境采集样本，样本的分布更加均匀，更有利于神经网络的训练。</p>
+<div class="figure">
+<img src="http://jiantuku-image-ginger.oss-cn-beijing.aliyuncs.com/18-6-9/42121203.jpg">
+
+</div>
+<h1 id="example">5. Example</h1>
+<h2 id="cartpole">CartPole</h2>
+<p>CartPole的玩法如下动图所示，目标就是保持一根杆一直竖直朝上，杆由于重力原因会一直倾斜，当杆倾斜到一定程度就会倒下，此时需要朝左或者右移动杆保证它不会倒下来。我们执行一个动作，动作取值为0或1，代表向左或向右移动，返回的observation是一个四维向量，reward值一直是1，当杆倒下时done的取值为False，其他为True，info是调试信息打印为空具体使用暂时不清楚。如果杆竖直向上的时间越长，得到reward的次数就越多。 <img src="cp_1.gif"></p>
 <figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br><span class="line">185</span><br><span class="line">186</span><br><span class="line">187</span><br><span class="line">188</span><br><span class="line">189</span><br><span class="line">190</span><br><span class="line">191</span><br><span class="line">192</span><br><span class="line">193</span><br><span class="line">194</span><br><span class="line">195</span><br><span class="line">196</span><br><span class="line">197</span><br><span class="line">198</span><br><span class="line">199</span><br><span class="line">200</span><br><span class="line">201</span><br><span class="line">202</span><br><span class="line">203</span><br><span class="line">204</span><br><span class="line">205</span><br><span class="line">206</span><br><span class="line">207</span><br><span class="line">208</span><br><span class="line">209</span><br><span class="line">210</span><br><span class="line">211</span><br><span class="line">212</span><br><span class="line">213</span><br><span class="line">214</span><br><span class="line">215</span><br><span class="line">216</span><br><span class="line">217</span><br><span class="line">218</span><br><span class="line">219</span><br><span class="line">220</span><br><span class="line">221</span><br><span class="line">222</span><br><span class="line">223</span><br><span class="line">224</span><br><span class="line">225</span><br><span class="line">226</span><br><span class="line">227</span><br><span class="line">228</span><br><span class="line">229</span><br><span class="line">230</span><br><span class="line">231</span><br><span class="line">232</span><br><span class="line">233</span><br><span class="line">234</span><br><span class="line">235</span><br><span class="line">236</span><br><span class="line">237</span><br><span class="line">238</span><br><span class="line">239</span><br><span class="line">240</span><br><span class="line">241</span><br><span class="line">242</span><br><span class="line">243</span><br><span class="line">244</span><br><span class="line">245</span><br><span class="line">246</span><br><span class="line">247</span><br><span class="line">248</span><br><span class="line">249</span><br><span class="line">250</span><br><span class="line">251</span><br><span class="line">252</span><br><span class="line">253</span><br><span class="line">254</span><br><span class="line">255</span><br><span class="line">256</span><br><span class="line">257</span><br><span class="line">258</span><br><span class="line">259</span><br><span class="line">260</span><br><span class="line">261</span><br><span class="line">262</span><br><span class="line">263</span><br><span class="line">264</span><br><span class="line">265</span><br><span class="line">266</span><br><span class="line">267</span><br><span class="line">268</span><br><span class="line">269</span><br><span class="line">270</span><br><span class="line">271</span><br><span class="line">272</span><br><span class="line">273</span><br><span class="line">274</span><br><span class="line">275</span><br><span class="line">276</span><br><span class="line">277</span><br><span class="line">278</span><br><span class="line">279</span><br><span class="line">280</span><br><span class="line">281</span><br><span class="line">282</span><br><span class="line">283</span><br><span class="line">284</span><br><span class="line">285</span><br><span class="line">286</span><br><span class="line">287</span><br><span class="line">288</span><br><span class="line">289</span><br><span class="line">290</span><br><span class="line">291</span><br><span class="line">292</span><br><span class="line">293</span><br><span class="line">294</span><br><span class="line">295</span><br><span class="line">296</span><br><span class="line">297</span><br><span class="line">298</span><br><span class="line">299</span><br><span class="line">300</span><br><span class="line">301</span><br><span class="line">302</span><br><span class="line">303</span><br><span class="line">304</span><br><span class="line">305</span><br><span class="line">306</span><br><span class="line">307</span><br><span class="line">308</span><br><span class="line">309</span><br><span class="line">310</span><br><span class="line">311</span><br><span class="line">312</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># OpenGym CartPole-v0 with A3C on GPU</span></span><br><span class="line"><span class="comment"># -----------------------------------</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># A3C implementation with GPU optimizer threads.</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Made as part of blog series Let's make an A3C, available at</span></span><br><span class="line"><span class="comment"># https://jaromiru.com/2017/02/16/lets-make-an-a3c-theory/</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># author: Jaromir Janisch, 2017</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="keyword">import</span> tensorflow <span class="keyword">as</span> tf</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> gym, time, random, threading</span><br><span class="line"></span><br><span class="line"><span class="keyword">from</span> keras.models <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> keras.layers <span class="keyword">import</span> *</span><br><span class="line"><span class="keyword">from</span> keras <span class="keyword">import</span> backend <span class="keyword">as</span> K</span><br><span class="line"></span><br><span class="line"><span class="comment"># -- constants</span></span><br><span class="line">ENV = <span class="string">'CartPole-v0'</span></span><br><span class="line"></span><br><span class="line">RUN_TIME = <span class="number">30</span></span><br><span class="line">THREADS = <span class="number">8</span></span><br><span class="line">OPTIMIZERS = <span class="number">2</span></span><br><span class="line">THREAD_DELAY = <span class="number">0.001</span></span><br><span class="line"></span><br><span class="line">GAMMA = <span class="number">0.99</span></span><br><span class="line"></span><br><span class="line">N_STEP_RETURN = <span class="number">8</span></span><br><span class="line">GAMMA_N = GAMMA ** N_STEP_RETURN</span><br><span class="line"></span><br><span class="line">EPS_START = <span class="number">0.4</span></span><br><span class="line">EPS_STOP = <span class="number">.15</span></span><br><span class="line">EPS_STEPS = <span class="number">75000</span></span><br><span class="line"></span><br><span class="line">MIN_BATCH = <span class="number">32</span></span><br><span class="line">LEARNING_RATE = <span class="number">5e-3</span></span><br><span class="line"></span><br><span class="line">LOSS_V = <span class="number">.5</span>  <span class="comment"># v loss coefficient</span></span><br><span class="line">LOSS_ENTROPY = <span class="number">.01</span>  <span class="comment"># entropy coefficient</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># ---------</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Brain</span>:</span></span><br><span class="line">    train_queue = [[], [], [], [], []]  <span class="comment"># s, a, r, s', s' terminal mask</span></span><br><span class="line">    lock_queue = threading.Lock()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.session = tf.Session()</span><br><span class="line">        K.set_session(self.session)</span><br><span class="line">        K.manual_variable_initialization(<span class="keyword">True</span>)</span><br><span class="line"></span><br><span class="line">        self.model = self._build_model()</span><br><span class="line">        self.graph = self._build_graph(self.model)</span><br><span class="line"></span><br><span class="line">        self.session.run(tf.global_variables_initializer())</span><br><span class="line">        self.default_graph = tf.get_default_graph()</span><br><span class="line"></span><br><span class="line">        self.default_graph.finalize()  <span class="comment"># avoid modifications</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_build_model</span><span class="params">(self)</span>:</span></span><br><span class="line"></span><br><span class="line">        l_input = Input(batch_shape=(<span class="keyword">None</span>, NUM_STATE))</span><br><span class="line">        l_dense = Dense(<span class="number">16</span>, activation=<span class="string">'relu'</span>)(l_input)</span><br><span class="line"></span><br><span class="line">        out_actions = Dense(NUM_ACTIONS, activation=<span class="string">'softmax'</span>)(l_dense)</span><br><span class="line">        out_value = Dense(<span class="number">1</span>, activation=<span class="string">'linear'</span>)(l_dense)</span><br><span class="line"></span><br><span class="line">        model = Model(inputs=[l_input], outputs=[out_actions, out_value])</span><br><span class="line">        model._make_predict_function()  <span class="comment"># have to initialize before threading</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> model</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">_build_graph</span><span class="params">(self, model)</span>:</span></span><br><span class="line">        s_t = tf.placeholder(tf.float32, shape=(<span class="keyword">None</span>, NUM_STATE))</span><br><span class="line">        a_t = tf.placeholder(tf.float32, shape=(<span class="keyword">None</span>, NUM_ACTIONS))</span><br><span class="line">        r_t = tf.placeholder(tf.float32, shape=(<span class="keyword">None</span>, <span class="number">1</span>))  <span class="comment"># not immediate, but discounted n step reward</span></span><br><span class="line"></span><br><span class="line">        p, v = model(s_t)</span><br><span class="line"></span><br><span class="line">        log_prob = tf.log(tf.reduce_sum(p * a_t, axis=<span class="number">1</span>, keep_dims=<span class="keyword">True</span>) + <span class="number">1e-10</span>)</span><br><span class="line">        advantage = r_t - v</span><br><span class="line"></span><br><span class="line">        loss_policy = - log_prob * tf.stop_gradient(advantage)  <span class="comment"># maximize policy</span></span><br><span class="line">        loss_value = LOSS_V * tf.square(advantage)  <span class="comment"># minimize value error</span></span><br><span class="line">        entropy = LOSS_ENTROPY * tf.reduce_sum(p * tf.log(p + <span class="number">1e-10</span>), axis=<span class="number">1</span>,</span><br><span class="line">                                               keep_dims=<span class="keyword">True</span>)  <span class="comment"># maximize entropy (regularization)</span></span><br><span class="line"></span><br><span class="line">        loss_total = tf.reduce_mean(loss_policy + loss_value + entropy)</span><br><span class="line"></span><br><span class="line">        optimizer = tf.train.RMSPropOptimizer(LEARNING_RATE, decay=<span class="number">.99</span>)</span><br><span class="line">        minimize = optimizer.minimize(loss_total)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">return</span> s_t, a_t, r_t, minimize</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">optimize</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> len(self.train_queue[<span class="number">0</span>]) &lt; MIN_BATCH:</span><br><span class="line">            time.sleep(<span class="number">0</span>)  <span class="comment"># yield</span></span><br><span class="line">            <span class="keyword">return</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">with</span> self.lock_queue:</span><br><span class="line">            <span class="keyword">if</span> len(self.train_queue[<span class="number">0</span>]) &lt; MIN_BATCH:  <span class="comment"># more thread could have passed without lock</span></span><br><span class="line">                <span class="keyword">return</span>  <span class="comment"># we can't yield inside lock</span></span><br><span class="line"></span><br><span class="line">            s, a, r, s_, s_mask = self.train_queue</span><br><span class="line">            self.train_queue = [[], [], [], [], []]</span><br><span class="line"></span><br><span class="line">        s = np.vstack(s)</span><br><span class="line">        a = np.vstack(a)</span><br><span class="line">        r = np.vstack(r)</span><br><span class="line">        s_ = np.vstack(s_)</span><br><span class="line">        s_mask = np.vstack(s_mask)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> len(s) &gt; <span class="number">5</span> * MIN_BATCH: print(<span class="string">"Optimizer alert! Minimizing batch of %d"</span> % len(s))</span><br><span class="line"></span><br><span class="line">        v = self.predict_v(s_)</span><br><span class="line">        r = r + GAMMA_N * v * s_mask  <span class="comment"># set v to 0 where s_ is terminal state</span></span><br><span class="line"></span><br><span class="line">        s_t, a_t, r_t, minimize = self.graph</span><br><span class="line">        self.session.run(minimize, feed_dict=&#123;s_t: s, a_t: a, r_t: r&#125;)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">train_push</span><span class="params">(self, s, a, r, s_)</span>:</span></span><br><span class="line">        <span class="keyword">with</span> self.lock_queue:</span><br><span class="line">            self.train_queue[<span class="number">0</span>].append(s)</span><br><span class="line">            self.train_queue[<span class="number">1</span>].append(a)</span><br><span class="line">            self.train_queue[<span class="number">2</span>].append(r)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> s_ <span class="keyword">is</span> <span class="keyword">None</span>:</span><br><span class="line">                self.train_queue[<span class="number">3</span>].append(NONE_STATE)</span><br><span class="line">                self.train_queue[<span class="number">4</span>].append(<span class="number">0.</span>)</span><br><span class="line">            <span class="keyword">else</span>:</span><br><span class="line">                self.train_queue[<span class="number">3</span>].append(s_)</span><br><span class="line">                self.train_queue[<span class="number">4</span>].append(<span class="number">1.</span>)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">predict</span><span class="params">(self, s)</span>:</span></span><br><span class="line">        <span class="keyword">with</span> self.default_graph.as_default():</span><br><span class="line">            p, v = self.model.predict(s)</span><br><span class="line">            <span class="keyword">return</span> p, v</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">predict_p</span><span class="params">(self, s)</span>:</span></span><br><span class="line">        <span class="keyword">with</span> self.default_graph.as_default():</span><br><span class="line">            p, v = self.model.predict(s)</span><br><span class="line">            <span class="keyword">return</span> p</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">predict_v</span><span class="params">(self, s)</span>:</span></span><br><span class="line">        <span class="keyword">with</span> self.default_graph.as_default():</span><br><span class="line">            p, v = self.model.predict(s)</span><br><span class="line">            <span class="keyword">return</span> v</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># ---------</span></span><br><span class="line">frames = <span class="number">0</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Agent</span>:</span></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, eps_start, eps_end, eps_steps)</span>:</span></span><br><span class="line">        self.eps_start = eps_start</span><br><span class="line">        self.eps_end = eps_end</span><br><span class="line">        self.eps_steps = eps_steps</span><br><span class="line"></span><br><span class="line">        self.memory = []  <span class="comment"># used for n_step return</span></span><br><span class="line">        self.R = <span class="number">0.</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">getEpsilon</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">if</span> (frames &gt;= self.eps_steps):</span><br><span class="line">            <span class="keyword">return</span> self.eps_end</span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            <span class="keyword">return</span> self.eps_start + frames * (self.eps_end - self.eps_start) / self.eps_steps  <span class="comment"># linearly interpolate</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">act</span><span class="params">(self, s)</span>:</span></span><br><span class="line">        eps = self.getEpsilon()</span><br><span class="line">        <span class="keyword">global</span> frames;</span><br><span class="line">        frames = frames + <span class="number">1</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> random.random() &lt; eps:</span><br><span class="line">            <span class="keyword">return</span> random.randint(<span class="number">0</span>, NUM_ACTIONS - <span class="number">1</span>)</span><br><span class="line"></span><br><span class="line">        <span class="keyword">else</span>:</span><br><span class="line">            s = np.array([s])</span><br><span class="line">            p = brain.predict_p(s)[<span class="number">0</span>]</span><br><span class="line"></span><br><span class="line">            <span class="comment"># a = np.argmax(p)</span></span><br><span class="line">            a = np.random.choice(NUM_ACTIONS, p=p)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> a</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">train</span><span class="params">(self, s, a, r, s_)</span>:</span></span><br><span class="line">        <span class="function"><span class="keyword">def</span> <span class="title">get_sample</span><span class="params">(memory, n)</span>:</span></span><br><span class="line">            s, a, _, _ = memory[<span class="number">0</span>]</span><br><span class="line">            _, _, _, s_ = memory[n - <span class="number">1</span>]</span><br><span class="line"></span><br><span class="line">            <span class="keyword">return</span> s, a, self.R, s_</span><br><span class="line"></span><br><span class="line">        a_cats = np.zeros(NUM_ACTIONS)  <span class="comment"># turn action into one-hot representation</span></span><br><span class="line">        a_cats[a] = <span class="number">1</span></span><br><span class="line"></span><br><span class="line">        self.memory.append((s, a_cats, r, s_))</span><br><span class="line"></span><br><span class="line">        self.R = (self.R + r * GAMMA_N) / GAMMA</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> s_ <span class="keyword">is</span> <span class="keyword">None</span>:</span><br><span class="line">            <span class="keyword">while</span> len(self.memory) &gt; <span class="number">0</span>:</span><br><span class="line">                n = len(self.memory)</span><br><span class="line">                s, a, r, s_ = get_sample(self.memory, n)</span><br><span class="line">                brain.train_push(s, a, r, s_)</span><br><span class="line"></span><br><span class="line">                self.R = (self.R - self.memory[<span class="number">0</span>][<span class="number">2</span>]) / GAMMA</span><br><span class="line">                self.memory.pop(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">            self.R = <span class="number">0</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> len(self.memory) &gt;= N_STEP_RETURN:</span><br><span class="line">            s, a, r, s_ = get_sample(self.memory, N_STEP_RETURN)</span><br><span class="line">            brain.train_push(s, a, r, s_)</span><br><span class="line"></span><br><span class="line">            self.R = self.R - self.memory[<span class="number">0</span>][<span class="number">2</span>]</span><br><span class="line">            self.memory.pop(<span class="number">0</span>)</span><br><span class="line"></span><br><span class="line">            <span class="comment"># possible edge case - if an episode ends in &lt;N steps, the computation is incorrect</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># ---------</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Environment</span><span class="params">(threading.Thread)</span>:</span></span><br><span class="line">    stop_signal = <span class="keyword">False</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self, render=False, eps_start=EPS_START, eps_end=EPS_STOP, eps_steps=EPS_STEPS)</span>:</span></span><br><span class="line">        threading.Thread.__init__(self)</span><br><span class="line"></span><br><span class="line">        self.render = render</span><br><span class="line">        self.env = gym.make(ENV)</span><br><span class="line">        self.agent = Agent(eps_start, eps_end, eps_steps)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">runEpisode</span><span class="params">(self)</span>:</span></span><br><span class="line">        s = self.env.reset()</span><br><span class="line"></span><br><span class="line">        R = <span class="number">0</span></span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">True</span>:</span><br><span class="line">            time.sleep(THREAD_DELAY)  <span class="comment"># yield</span></span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> self.render: self.env.render()</span><br><span class="line"></span><br><span class="line">            a = self.agent.act(s)</span><br><span class="line">            s_, r, done, info = self.env.step(a)</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> done:  <span class="comment"># terminal state</span></span><br><span class="line">                s_ = <span class="keyword">None</span></span><br><span class="line"></span><br><span class="line">            self.agent.train(s, a, r, s_)</span><br><span class="line"></span><br><span class="line">            s = s_</span><br><span class="line">            R += r</span><br><span class="line"></span><br><span class="line">            <span class="keyword">if</span> done <span class="keyword">or</span> self.stop_signal:</span><br><span class="line">                <span class="keyword">break</span></span><br><span class="line"></span><br><span class="line">        print(<span class="string">"Total R:"</span>, R)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">not</span> self.stop_signal:</span><br><span class="line">            self.runEpisode()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">stop</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.stop_signal = <span class="keyword">True</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># ---------</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Optimizer</span><span class="params">(threading.Thread)</span>:</span></span><br><span class="line">    stop_signal = <span class="keyword">False</span></span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">__init__</span><span class="params">(self)</span>:</span></span><br><span class="line">        threading.Thread.__init__(self)</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">run</span><span class="params">(self)</span>:</span></span><br><span class="line">        <span class="keyword">while</span> <span class="keyword">not</span> self.stop_signal:</span><br><span class="line">            brain.optimize()</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">def</span> <span class="title">stop</span><span class="params">(self)</span>:</span></span><br><span class="line">        self.stop_signal = <span class="keyword">True</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># -- main</span></span><br><span class="line">env_test = Environment(render=<span class="keyword">True</span>, eps_start=<span class="number">0.</span>, eps_end=<span class="number">0.</span>)</span><br><span class="line">NUM_STATE = env_test.env.observation_space.shape[<span class="number">0</span>]</span><br><span class="line">NUM_ACTIONS = env_test.env.action_space.n</span><br><span class="line">NONE_STATE = np.zeros(NUM_STATE)</span><br><span class="line"></span><br><span class="line">brain = Brain()  <span class="comment"># brain is global in A3C</span></span><br><span class="line"></span><br><span class="line">envs = [Environment() <span class="keyword">for</span> i <span class="keyword">in</span> range(THREADS)]</span><br><span class="line">opts = [Optimizer() <span class="keyword">for</span> i <span class="keyword">in</span> range(OPTIMIZERS)]</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> o <span class="keyword">in</span> opts:</span><br><span class="line">    o.start()</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> e <span class="keyword">in</span> envs:</span><br><span class="line">    e.start()</span><br><span class="line"></span><br><span class="line">time.sleep(RUN_TIME)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> e <span class="keyword">in</span> envs:</span><br><span class="line">    e.stop()</span><br><span class="line"><span class="keyword">for</span> e <span class="keyword">in</span> envs:</span><br><span class="line">    e.join()</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> o <span class="keyword">in</span> opts:</span><br><span class="line">    o.stop()</span><br><span class="line"><span class="keyword">for</span> o <span class="keyword">in</span> opts:</span><br><span class="line">    o.join()</span><br><span class="line"></span><br><span class="line">print(<span class="string">"Training finished"</span>)</span><br><span class="line">env_test.run()</span><br></pre></td></tr></table></figure>
-<h1 id="ref"><a class="markdownIt-Anchor" href="#ref"></a> Ref</h1>
-<ol>
-<li><a href="https://zhuanlan.zhihu.com/p/32438022" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/32438022</a></li>
+<h1 id="ref">Ref</h1>
+<ol style="list-style-type: decimal">
+<li><a href="https://zhuanlan.zhihu.com/p/32438022" class="uri" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/32438022</a></li>
 <li>David Silver ppt</li>
-<li><a href="https://www.youtube.com/watch?v=O79Ic8XBzvw" target="_blank" rel="noopener">https://www.youtube.com/watch?v=O79Ic8XBzvw</a></li>
-<li><a href="https://zhuanlan.zhihu.com/p/32596470" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/32596470</a></li>
-<li><a href="http://pemami4911.github.io/blog/2016/08/21/ddpg-rl.html" target="_blank" rel="noopener">http://pemami4911.github.io/blog/2016/08/21/ddpg-rl.html</a></li>
-<li><a href="http://karpathy.github.io/2016/05/31/rl/" target="_blank" rel="noopener">http://karpathy.github.io/2016/05/31/rl/</a></li>
+<li>https://www.youtube.com/watch?v=O79Ic8XBzvw</li>
+<li>https://zhuanlan.zhihu.com/p/32596470</li>
+<li>http://pemami4911.github.io/blog/2016/08/21/ddpg-rl.html</li>
+<li>http://karpathy.github.io/2016/05/31/rl/</li>
 </ol>
 
       
@@ -519,12 +466,10 @@ Using return vt as an unbiased sample of <span class="katex"><span class="katex-
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h2 id="得体的表达者"><a class="markdownIt-Anchor" href="#得体的表达者"></a> 得体的表达者</h2>
+        <h2 id="得体的表达者">得体的表达者</h2>
 <p>山雨欲来的，不仅有南方的台风天，姨妈，还有写作的欲望。这三个元素凑在一起，想想就黏腻。作为理科生，我总是为这点表达欲感到羞耻。时常压抑着，就像旧时深闺妇人。于是就端着姿态，每隔着几天，把大脑里面的俏皮事儿理一理， “漫不经心”的把绞尽脑汁写的段子扔进热滚滚的网络，装作是红尘中的局外人，可谁知心里嘈杂的跟春运的火车站似的，各种灵光一闪的意识流摩肩接踵。拧巴得像一只莫比乌斯带。</p>
 <p>这种羞耻感从何而来？所以在憋不出论文的时候，我盘起腿来，琢磨起这件事情来，专心致志。</p>
-<p>大概是潜意识里，总觉得太过主动的文字有些廉价。就算是有名的作家，如果太过高产，便会降低我对他的崇敬，语句太繁复，便会令人觉得矫揉造作。“炼字”是门学问，用我们理科生的话说，使信息熵最大化。在我有限的样本里，能做到文字练达的作家，前三名就是鲁迅、阿城、汪曾祺。你看，这都是公认的文学大家。可惜我做不到如此，总想在网络上写肤浅的俏皮话，真令人沮丧，一沮丧，就更想喋喋不休，简直像像现代的祥林嫂，羞不羞。没办法，情绪产能过剩，总得变着花样出售。真是羡慕那些跟自己五脏六腑交流的人，表达欲便可自产自销，微博要么空荡荡，要么就“转发”二字。你看看，多冷漠，多迷人。你看看，这供求关系多不平衡，过剩的只能贱卖，真不可爱，不得体，羞不羞。这时候，总会有同学跳出来说，你怎么有那么多想说的，然后把我架到巨型飞镖盘上，眼看着那些写着“太闲”“大龄单身就是矫情”“不务正业”“幼稚”的飞镖嗖嗖地从身边飞过，不知道哪个就倏地扎在心上，最羞耻的是，还让他们说中了。<br>
-“那你最近怎么写了这么多？”<br>
-“嘘——我…不告诉你。”</p>
+<p>大概是潜意识里，总觉得太过主动的文字有些廉价。就算是有名的作家，如果太过高产，便会降低我对他的崇敬，语句太繁复，便会令人觉得矫揉造作。“炼字”是门学问，用我们理科生的话说，使信息熵最大化。在我有限的样本里，能做到文字练达的作家，前三名就是鲁迅、阿城、汪曾祺。你看，这都是公认的文学大家。可惜我做不到如此，总想在网络上写肤浅的俏皮话，真令人沮丧，一沮丧，就更想喋喋不休，简直像像现代的祥林嫂，羞不羞。没办法，情绪产能过剩，总得变着花样出售。真是羡慕那些跟自己五脏六腑交流的人，表达欲便可自产自销，微博要么空荡荡，要么就“转发”二字。你看看，多冷漠，多迷人。你看看，这供求关系多不平衡，过剩的只能贱卖，真不可爱，不得体，羞不羞。这时候，总会有同学跳出来说，你怎么有那么多想说的，然后把我架到巨型飞镖盘上，眼看着那些写着“太闲”“大龄单身就是矫情”“不务正业”“幼稚”的飞镖嗖嗖地从身边飞过，不知道哪个就倏地扎在心上，最羞耻的是，还让他们说中了。 “那你最近怎么写了这么多？” “嘘——我...不告诉你。”</p>
 
       
 
@@ -549,80 +494,6 @@ Using return vt as an unbiased sample of <span class="katex"><span class="katex-
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2018/06/08/Optimization theory of life 2/">展开全文 >></a>
-        </p>
-      
-
-      
-      <div class="clearfix"></div>
-    </div>
-  </div>
-</article>
-
-<aside class="wrap-side-operation">
-    <div class="mod-side-operation">
-        
-        <div class="jump-container" id="js-jump-container" style="display:none;">
-            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
-                <i class="icon-font icon-back"></i>
-            </a>
-            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
-                <i class="icon-font icon-plane jump-plane"></i>
-            </div>
-        </div>
-        
-        
-    </div>
-</aside>
-
-
-
-
-  
-    <article id="post-Optimization theory of life 1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
-  <div class="article-inner">
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/05/29/Optimization theory of life 1/">Optimization theory of life 1</a>
-    </h1>
-  
-
-        
-        <a href="/2018/05/29/Optimization theory of life 1/" class="archive-article-date">
-  	<time datetime="2018-05-29T12:44:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-05-29</time>
-</a>
-        
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>长大之后，频频觉得难以给自己定位。就像刘瑜说的“在男人世界里太女人，在女人世界里太男人，在学者面前太肤浅，在老粗面前又太文艺，在中国人里面太西方，在西方人眼里又太传统。” 好歹刘瑜对自己的认知粒度还比较宽，至少认为自己是个“女人”。然而我现在也到了她写这段话的年龄了，却还是难以突破自己心里的堡垒，无法把自我认知为“女人”。并不是我对“女人”这个词有歧视，而是时时有配不上之感。在我眼里，“女人”或柔媚，或坚韧，或温婉，带有着强烈的女性荷尔蒙，是一种成熟的意味，不是年龄上的成熟，而是荷尔蒙上的成熟。甚至不用见其人，远方传来的细高跟鞋声，香水味或细软的声音，你就知道，那边来了一个女人。“少女/女孩”就跟我离得更远了，特指女性在未成年前的一段时间，是天真与清纯的代名词。可惜那已经是十年前了。想起有朋友还觉得去年的我“天真烂漫”，对于少女那是一种礼赞，而我认真的认为他在骂人。罢了，我想叫自己“女生/女大学生”，但是看到校园里入学的00后，又忍不住闭嘴。没结婚连“少妇”都不够格，叫自己“阿姨”又不忍心。您看，多拧巴。最后，维基百科说，“女青年”比较适合我。这仨字，没有暗含的标签，毫无特色，一马平川。好吧，女青年。</p>
-
-      
-
-      
-    </div>
-    <div class="article-info article-info-index">
-      
-      
-	<div class="article-tag tagcloud">
-		<i class="icon-price-tags icon"></i>
-		<ul class="article-tag-list">
-			 
-        		<li class="article-tag-list-item">
-        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">随笔</a>
-        		</li>
-      		
-		</ul>
-	</div>
-
-      
-
-      
-        <p class="article-more-link">
-          <a class="article-more-a" href="/2018/05/29/Optimization theory of life 1/">展开全文 >></a>
         </p>
       
 
@@ -697,6 +568,80 @@ Using return vt as an unbiased sample of <span class="katex"><span class="katex-
       
         <p class="article-more-link">
           <a class="article-more-a" href="/2018/05/29/Optimization theory of life 0/">展开全文 >></a>
+        </p>
+      
+
+      
+      <div class="clearfix"></div>
+    </div>
+  </div>
+</article>
+
+<aside class="wrap-side-operation">
+    <div class="mod-side-operation">
+        
+        <div class="jump-container" id="js-jump-container" style="display:none;">
+            <a href="javascript:void(0)" class="mod-side-operation__jump-to-top">
+                <i class="icon-font icon-back"></i>
+            </a>
+            <div id="js-jump-plan-container" class="jump-plan-container" style="top: -11px;">
+                <i class="icon-font icon-plane jump-plane"></i>
+            </div>
+        </div>
+        
+        
+    </div>
+</aside>
+
+
+
+
+  
+    <article id="post-Optimization theory of life 1" class="article article-type-post  article-index" itemscope itemprop="blogPost">
+  <div class="article-inner">
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/05/29/Optimization theory of life 1/">Optimization theory of life 1</a>
+    </h1>
+  
+
+        
+        <a href="/2018/05/29/Optimization theory of life 1/" class="archive-article-date">
+  	<time datetime="2018-05-29T12:44:00.000Z" itemprop="datePublished"><i class="icon-calendar icon"></i>2018-05-29</time>
+</a>
+        
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>长大之后，频频觉得难以给自己定位。就像刘瑜说的“在男人世界里太女人，在女人世界里太男人，在学者面前太肤浅，在老粗面前又太文艺，在中国人里面太西方，在西方人眼里又太传统。” 好歹刘瑜对自己的认知粒度还比较宽，至少认为自己是个“女人”。然而我现在也到了她写这段话的年龄了，却还是难以突破自己心里的堡垒，无法把自我认知为“女人”。并不是我对“女人”这个词有歧视，而是时时有配不上之感。在我眼里，“女人”或柔媚，或坚韧，或温婉，带有着强烈的女性荷尔蒙，是一种成熟的意味，不是年龄上的成熟，而是荷尔蒙上的成熟。甚至不用见其人，远方传来的细高跟鞋声，香水味或细软的声音，你就知道，那边来了一个女人。“少女/女孩”就跟我离得更远了，特指女性在未成年前的一段时间，是天真与清纯的代名词。可惜那已经是十年前了。想起有朋友还觉得去年的我“天真烂漫”，对于少女那是一种礼赞，而我认真的认为他在骂人。罢了，我想叫自己“女生/女大学生”，但是看到校园里入学的00后，又忍不住闭嘴。没结婚连“少妇”都不够格，叫自己“阿姨”又不忍心。您看，多拧巴。最后，维基百科说，“女青年”比较适合我。这仨字，没有暗含的标签，毫无特色，一马平川。好吧，女青年。</p>
+
+      
+
+      
+    </div>
+    <div class="article-info article-info-index">
+      
+      
+	<div class="article-tag tagcloud">
+		<i class="icon-price-tags icon"></i>
+		<ul class="article-tag-list">
+			 
+        		<li class="article-tag-list-item">
+        			<a href="javascript:void(0)" class="js-tag article-tag-list-link color3">随笔</a>
+        		</li>
+      		
+		</ul>
+	</div>
+
+      
+
+      
+        <p class="article-more-link">
+          <a class="article-more-a" href="/2018/05/29/Optimization theory of life 1/">展开全文 >></a>
         </p>
       
 
@@ -987,6 +932,23 @@ return o(i(t),arguments.length<2?void 0:u(arguments[1]))}})},function(t,n,r){var
     </div>
 
 </div>
-  </div>
+  </div><!-- hexo-inject:begin --><!-- Begin: Injected MathJax -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({"tex2jax":{"inlineMath":[["$","$"],["\\(","\\)"]],"skipTags":["script","noscript","style","textarea","pre","code"],"processEscapes":true},"TeX":{"equationNumbers":{"autoNumber":"AMS"}}});
+</script>
+
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i=0; i < all.length; i += 1) {
+      all[i].SourceElement().parentNode.className += ' has-jax';
+    }
+  });
+</script>
+
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js">
+</script>
+<!-- End: Injected MathJax -->
+<!-- hexo-inject:end -->
 </body>
 </html>
