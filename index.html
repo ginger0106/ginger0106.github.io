@@ -189,13 +189,13 @@
 </ul>
 <p><img src="http://jiantuku-image-ginger.oss-cn-beijing.aliyuncs.com/18-6-9/35231674.jpg" alt=""><br><img src="http://jiantuku-image-ginger.oss-cn-beijing.aliyuncs.com/18-6-9/96174817.jpg" alt=""></p>
 <h1 id="2-Value-based-RL-amp-Policy-based-RL"><a href="#2-Value-based-RL-amp-Policy-based-RL" class="headerlink" title="2. Value-based RL &amp; Policy-based RL"></a>2. Value-based RL &amp; Policy-based RL</h1><h2 id="Def"><a href="#Def" class="headerlink" title="Def"></a>Def</h2><ul>
-<li><strong>Value-based： </strong> A policy is generated from value function:<br>$$ V_\theta (s)= V^\pi(s) $$<br>$$ Q_\theta (s,a)= Q^\pi(s,a)$$</li>
+<li><strong>Value-based： </strong> A policy is generated from value function:<script type="math/tex; mode=display">V_\theta (s)= V^\pi(s)</script><script type="math/tex; mode=display">Q_\theta (s,a)= Q^\pi(s,a)</script></li>
 </ul>
 <blockquote>
 <p>我们用线性非线性的方式对值函数进行逼近求解</p>
 </blockquote>
 <ul>
-<li><strong>Policy-based RL： </strong>Directly parametrise the policy:<br>$$ \pi_\theta(s,a)= P[a | s,\theta]$$<br>The output is a probability. </li>
+<li><strong>Policy-based RL： </strong>Directly parametrise the policy: <script type="math/tex; mode=display">\pi_\theta(s,a)= P[a | s,\theta]</script>The output is a probability. </li>
 </ul>
 <blockquote>
 <p>用线性或非线性（如神经网络）对策略进行求解 </p>
@@ -277,13 +277,12 @@
 </li>
 </ul>
 <h1 id="3-Actor-Critic"><a href="#3-Actor-Critic" class="headerlink" title="3. Actor-Critic"></a>3. Actor-Critic</h1><h2 id="Q-Actor-Critic"><a href="#Q-Actor-Critic" class="headerlink" title="Q Actor-Critic"></a>Q Actor-Critic</h2><ul>
-<li><p>We use a critic to estimate the action-value function<br>$$ Q_w(s,a)\approx Q^{\pi_\theta}(s, a)$$</p>
-</li>
+<li><p>We use a critic to estimate the action-value function</p>
+<script type="math/tex; mode=display">Q_w(s,a)\approx Q^{\pi_\theta}(s, a)</script></li>
 <li><p>Actor-critic algorithms maintain two sets of parameters</p>
 <p>-<strong>Critic</strong> Updates action-value function parameters w</p>
 <p>-<strong>Actor</strong> Updates policy parameters θ, in direction suggested by critic</p>
-<p>$$\Delta\theta=\alpha\nabla_\theta log \pi_\theta(s,a)Q_w(s, a)$$</p>
-<blockquote>
+<script type="math/tex; mode=display">\Delta\theta=\alpha\nabla_\theta log \pi_\theta(s,a)Q_w(s, a)</script><blockquote>
 <p>可以明显看出，Critic做的事情其实是我们已经见过的：策略评估，他要告诉个体，在由参数 $\theta$ 确定的策略 $\pi_{\theta}$ 到底表现得怎么样。关于策略评估我们之前讲过，可以使用蒙特卡洛策略评估、TD学习以及TD(λ)等方式实现</p>
 </blockquote>
 </li>
@@ -293,11 +292,11 @@
 <p>在这个例子当中，我们只是用了线性的函数来估计Q，当然目前都是神经网络来计算了。另外，REINFORCE和Q AC有high variance的问题。因此有了如下的改进算法。</p>
 </blockquote>
 <h2 id="Advantage-Actor-Critic"><a href="#Advantage-Actor-Critic" class="headerlink" title="Advantage Actor-Critic"></a>Advantage Actor-Critic</h2><ul>
-<li>advantage function<br>$$ V_v(s,a)\approx V^{\pi_\theta}(s, a)$$<br>$$ Q_w(s,a)\approx Q^{\pi_\theta}(s, a)$$<br>$$ A(s,a)= Q_w(s,a)-V_v(s,a)$$<br><img src="https://github.com/ginger0106/Blog_source_backup/blob/master/ginger0106/images/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20180327224706.png" alt=""></li>
+<li>advantage function<script type="math/tex; mode=display">V_v(s,a)\approx V^{\pi_\theta}(s, a)</script><script type="math/tex; mode=display">Q_w(s,a)\approx Q^{\pi_\theta}(s, a)</script><script type="math/tex; mode=display">A(s,a)= Q_w(s,a)-V_v(s,a)</script><img src="https://github.com/ginger0106/Blog_source_backup/blob/master/ginger0106/images/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20180327224706.png" alt=""></li>
 </ul>
 <h2 id="Training"><a href="#Training" class="headerlink" title="Training"></a>Training</h2><p><img src="http://jiantuku-image-ginger.oss-cn-beijing.aliyuncs.com/18-6-9/10566688.jpg" alt=""></p>
 <p>如上图：我们说AC结合了 Policy Gradient (Actor) 和 Function Approximation (Critic) 的方法. Actor 基于概率选行为, Critic 基于 Actor 的行为评判行为的得分, Actor 根据 Critic 的评分修改选行为的概率。</p>
-<p>结合到具体的网络上就是：Actor和Critic各为一个网络，Actor输入是状态输出的是动作，loss就是$log_prob <em> td_error$,(和策略梯度相对应，注意到这里的loss和Policy Gradient中的差不多，只是vt换成td_error，引导奖励值vt换了来源（Critic给的）而已)，Critic输入的是状态输出的是Q值，loss是$MSE((r+\gamma</em>Q_{next}) - Q_{eval})$也就是$MSE(td_error)$，也就是说这里更新critic对应Q-learning是一样的均方误差。</p>
+<p>结合到具体的网络上就是：Actor和Critic各为一个网络，Actor输入是状态输出的是动作，loss就是$log_prob <em> td_error$,(和策略梯度相对应，注意到这里的loss和Policy Gradient中的差不多，只是vt换成td_error，引导奖励值vt换了来源（Critic给的）而已)，Critic输入的是状态输出的是Q值，loss是$MSE((r+\gamma</em>Q<em>{next}) - Q</em>{eval})$也就是$MSE(td_error)$，也就是说这里更新critic对应Q-learning是一样的均方误差。</p>
 <h1 id="4-A3C"><a href="#4-A3C" class="headerlink" title="4. A3C"></a>4. A3C</h1><h2 id="Asynchronous"><a href="#Asynchronous" class="headerlink" title="Asynchronous"></a>Asynchronous</h2><p>DQN比传统RL算法有了巨大提升其中一个主要原因就是使用了经验回放的技巧。然而，打破数据的相关性，经验回放并非是唯一的方法。另外一种方法是<strong>异步</strong>的方法（异步的方法是指数据并非同时产生）<br><img src="https://github.com/ginger0106/Blog_source_backup/blob/master/ginger0106/images/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20180328102925.png" alt=""></p>
 <h2 id="Advantage"><a href="#Advantage" class="headerlink" title="Advantage"></a>Advantage</h2><p>相比DQN算法，A3C算法不需要使用经验池来存储历史样本并随机抽取训练来打乱数据相关性，节约了存储空间，并且采用异步训练，大大加倍了数据的采样速度，也因此提升了训练速度。与此同时，采用多个不同训练环境采集样本，样本的分布更加均匀，更有利于神经网络的训练。</p>
 <p><img src="http://jiantuku-image-ginger.oss-cn-beijing.aliyuncs.com/18-6-9/42121203.jpg" alt=""></p>
