@@ -16,7 +16,7 @@
 <meta property="og:site_name" content="Ginger&#39;s">
 <meta property="og:description" content="Mnih V, Badia A P, Mirza M, et al. Asynchronous methods for deep reinforcement learning[C]//International Conference on Machine Learning. 2016: 1928-1937. 2016 ICML">
 <meta property="og:locale" content="default">
-<meta property="og:image" content="https://github.com/ginger0106/Blog_source_backup/blob/master/ginger0106/images/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20180327205214.png">
+<meta property="og:image" content="https://i.loli.net/2018/06/10/5b1cdc64f34fd.png">
 <meta property="og:image" content="http://jiantuku-image-ginger.oss-cn-beijing.aliyuncs.com/18-6-9/35231674.jpg">
 <meta property="og:image" content="http://jiantuku-image-ginger.oss-cn-beijing.aliyuncs.com/18-6-9/96174817.jpg">
 <meta property="og:image" content="http://jiantuku-image-ginger.oss-cn-beijing.aliyuncs.com/18-6-9/31700400.jpg">
@@ -24,16 +24,16 @@
 <meta property="og:image" content="http://jiantuku-image-ginger.oss-cn-beijing.aliyuncs.com/18-6-9/58209890.jpg">
 <meta property="og:image" content="http://jiantuku-image-ginger.oss-cn-beijing.aliyuncs.com/18-6-9/88031244.jpg">
 <meta property="og:image" content="http://jiantuku-image-ginger.oss-cn-beijing.aliyuncs.com/18-6-9/45370982.jpg">
-<meta property="og:image" content="https://github.com/ginger0106/Blog_source_backup/blob/master/ginger0106/images/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20180327224706.png">
+<meta property="og:image" content="https://i.loli.net/2018/06/10/5b1cdc646a112.png">
 <meta property="og:image" content="http://jiantuku-image-ginger.oss-cn-beijing.aliyuncs.com/18-6-9/10566688.jpg">
-<meta property="og:image" content="https://github.com/ginger0106/Blog_source_backup/blob/master/ginger0106/images/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20180328102925.png">
+<meta property="og:image" content="https://i.loli.net/2018/06/10/5b1cdc6473164.png">
 <meta property="og:image" content="http://jiantuku-image-ginger.oss-cn-beijing.aliyuncs.com/18-6-9/42121203.jpg">
 <meta property="og:image" content="https://ginger0106.github.io/2018/06/09/a3C/cp_1.gif">
-<meta property="og:updated_time" content="2018-06-10T07:15:01.646Z">
+<meta property="og:updated_time" content="2018-06-10T08:09:40.687Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="A3C (asynchronous advantage actor-critic)">
 <meta name="twitter:description" content="Mnih V, Badia A P, Mirza M, et al. Asynchronous methods for deep reinforcement learning[C]//International Conference on Machine Learning. 2016: 1928-1937. 2016 ICML">
-<meta name="twitter:image" content="https://github.com/ginger0106/Blog_source_backup/blob/master/ginger0106/images/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20180327205214.png">
+<meta name="twitter:image" content="https://i.loli.net/2018/06/10/5b1cdc64f34fd.png">
   
     <link rel="alternative" href="/atom.xml" title="Ginger&#39;s" type="application/atom+xml">
   
@@ -199,7 +199,7 @@
 <p>On-policy methods attempt to evaluate or improve the policy that is used to make decisions, whereas off-policy methods evaluate or improve a policy different from that used to generate the data.</p>
 </blockquote>
 <p>一句话解释：其实就是只有一句话: 更新值函数时是否只使用当前策略所产生的样本.</p>
-<p><img src="https://github.com/ginger0106/Blog_source_backup/blob/master/ginger0106/images/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20180327205214.png"> - on-policy：REINFORCE, TRPO, SARSA</p>
+<p><img src="https://i.loli.net/2018/06/10/5b1cdc64f34fd.png" alt="微信截图_20180327205214.png"> - on-policy：REINFORCE, TRPO, SARSA</p>
 <ul>
 <li>off-policy：Q-learning, Deterministic policy gradient</li>
 </ul>
@@ -306,14 +306,14 @@
 <ul>
 <li>advantage function</li>
 </ul>
-<p><span class="math display">\[ V_v(s,a)\approx V^{\pi_\theta}(s, a)\]</span> <span class="math display">\[ Q_w(s,a)\approx Q^{\pi_\theta}(s, a)\]</span> <span class="math display">\[ A(s,a)= Q_w(s,a)-V_v(s,a)\]</span> <img src="https://github.com/ginger0106/Blog_source_backup/blob/master/ginger0106/images/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20180327224706.png"></p>
+<p><span class="math display">\[ V_v(s,a)\approx V^{\pi_\theta}(s, a)\]</span> <span class="math display">\[ Q_w(s,a)\approx Q^{\pi_\theta}(s, a)\]</span> <span class="math display">\[ A(s,a)= Q_w(s,a)-V_v(s,a)\]</span> <img src="https://i.loli.net/2018/06/10/5b1cdc646a112.png" alt="微信截图_20180327224706.png"></p>
 <h2 id="training">Training</h2>
 <p><img src="http://jiantuku-image-ginger.oss-cn-beijing.aliyuncs.com/18-6-9/10566688.jpg"></p>
 <p>如上图：我们说AC结合了 Policy Gradient (Actor) 和 Function Approximation (Critic) 的方法. Actor 基于概率选行为, Critic 基于 Actor 的行为评判行为的得分, Actor 根据 Critic 的评分修改选行为的概率。</p>
 <p>结合到具体的网络上就是：Actor和Critic各为一个网络，Actor输入是状态输出的是动作，loss就是<span class="math inline">\(log\_prob * td\_error\)</span>,(和策略梯度相对应，注意到这里的loss和Policy Gradient中的差不多，只是vt换成td_error，引导奖励值vt换了来源（Critic给的）而已)，Critic输入的是状态输出的是Q值，loss是<span class="math inline">\(MSE((r+\gamma*Q_{next}) - Q_{eval})\)</span>也就是<span class="math inline">\(MSE(td\_error)\)</span>，也就是说这里更新critic对应Q-learning是一样的均方误差。</p>
 <h1 id="a3c">4. A3C</h1>
 <h2 id="asynchronous">Asynchronous</h2>
-<p>DQN比传统RL算法有了巨大提升其中一个主要原因就是使用了经验回放的技巧。然而，打破数据的相关性，经验回放并非是唯一的方法。另外一种方法是<strong>异步</strong>的方法（异步的方法是指数据并非同时产生） <img src="https://github.com/ginger0106/Blog_source_backup/blob/master/ginger0106/images/%E5%BE%AE%E4%BF%A1%E6%88%AA%E5%9B%BE_20180328102925.png"> ## Advantage 相比DQN算法，A3C算法不需要使用经验池来存储历史样本并随机抽取训练来打乱数据相关性，节约了存储空间，并且采用异步训练，大大加倍了数据的采样速度，也因此提升了训练速度。与此同时，采用多个不同训练环境采集样本，样本的分布更加均匀，更有利于神经网络的训练。</p>
+<p>DQN比传统RL算法有了巨大提升其中一个主要原因就是使用了经验回放的技巧。然而，打破数据的相关性，经验回放并非是唯一的方法。另外一种方法是<strong>异步</strong>的方法（异步的方法是指数据并非同时产生） <img src="https://i.loli.net/2018/06/10/5b1cdc6473164.png" alt="微信截图_20180328102925.png"> ## Advantage 相比DQN算法，A3C算法不需要使用经验池来存储历史样本并随机抽取训练来打乱数据相关性，节约了存储空间，并且采用异步训练，大大加倍了数据的采样速度，也因此提升了训练速度。与此同时，采用多个不同训练环境采集样本，样本的分布更加均匀，更有利于神经网络的训练。</p>
 <p><img src="http://jiantuku-image-ginger.oss-cn-beijing.aliyuncs.com/18-6-9/42121203.jpg"></p>
 <h1 id="example">5. Example</h1>
 <h2 id="cartpole">CartPole</h2>
@@ -439,6 +439,15 @@
 
   
 <nav id="article-nav">
+  
+    <a href="/2018/06/10/xiamen/" id="article-nav-newer" class="article-nav-link-wrap">
+      <i class="icon-circle-left"></i>
+      <div class="article-nav-title">
+        
+          厦门之旅
+        
+      </div>
+    </a>
   
   
     <a href="/2018/06/09/Optimization theory of life 3/" id="article-nav-older" class="article-nav-link-wrap">
@@ -602,6 +611,10 @@ MathJax.Hub.Queue(function() {
              
               <li class="article-tag-list-item">
                 <a href="javascript:void(0)" class="js-tag color3">ML</a>
+              </li>
+             
+              <li class="article-tag-list-item">
+                <a href="javascript:void(0)" class="js-tag color1">travelling</a>
               </li>
             
             <div class="clearfix"></div>
