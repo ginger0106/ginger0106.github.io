@@ -251,7 +251,10 @@
 <li>Compute Policy Gradient</li>
 </ul>
 <p>如何来优化这个目标？ 我们采用随即梯度算法来解决。</p>
-<p><img src="http://jiantuku-image-ginger.oss-cn-beijing.aliyuncs.com/18-6-9/16343231.jpg"> <img src="http://jiantuku-image-ginger.oss-cn-beijing.aliyuncs.com/18-6-9/58209890.jpg"> &gt;所以，现在我们得到所有形式的目标函数所对应的策略梯度是一样的，注意这里有两个部分组成，一个是策略函数的log形式，一个是引导奖励(score function)。第一部分是参数化直接得到的，第二部分可以直接用即时奖励来计算，也可以用值函数近似，也就是AC算法。</p>
+<p><img src="http://jiantuku-image-ginger.oss-cn-beijing.aliyuncs.com/18-6-9/16343231.jpg"> <img src="http://jiantuku-image-ginger.oss-cn-beijing.aliyuncs.com/18-6-9/58209890.jpg"></p>
+<blockquote>
+<p>所以，现在我们得到所有形式的目标函数所对应的策略梯度是一样的，注意这里有两个部分组成，一个是策略函数的log形式，一个是引导奖励(score function)。第一部分是参数化直接得到的，第二部分可以直接用即时奖励来计算，也可以用值函数近似，也就是AC算法。</p>
+</blockquote>
 <h2 id="policy-function">Policy Function</h2>
 <ul>
 <li>softmax</li>
